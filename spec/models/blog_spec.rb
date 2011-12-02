@@ -1,5 +1,4 @@
-require 'minitest/autorun'
-require 'ostruct'
+require_relative '../spec_helper_lite'
 require_relative '../../app/models/blog'
 
 describe Blog do
