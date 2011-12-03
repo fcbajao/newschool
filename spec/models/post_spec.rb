@@ -52,4 +52,26 @@ describe Post do
       @it.publish
     end
   end
+
+  describe "#pubdate" do
+    describe "before publishing" do
+      it "should be blank" do
+        @it.pubdate.must_be_nil
+      end
+    end
+
+    describe "after publishing" do
+      before do
+        @clock = stub!
+        @now = DateTime.parse("2011-09-11T02:56")
+        stub(@clock).now(){@now}
+        @it.blog = stub!
+        @it.publish(@clock)
+      end
+
+      it "should be a datetime" do
+        @it.pubdate.must_equal(@now)
+      end
+    end
+  end
 end
