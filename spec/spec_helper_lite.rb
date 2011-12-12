@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'ostruct'
 require 'rr'
+require 'awesome_print'
 
 class MiniTest::Unit::TestCase
   include RR::Adapters::MiniTest

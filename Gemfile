@@ -34,4 +34,5 @@ group :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
   gem 'rr'
+  gem 'awesome_print'
 end

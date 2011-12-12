@@ -1,8 +1,4 @@
 require_relative '../spec_helper_lite'
-
-stub_module 'ActiveModel::Conversion'
-stub_module 'ActiveModel::Naming'
-
 require_relative '../../app/models/post'
 
 describe Post do
@@ -37,9 +33,22 @@ describe Post do
     it.body.must_equal "mybody"
   end
 
+  it "should not be valid with a blank title" do
+    [nil, "", " "].each do |bad_title|
+      @it.title = bad_title
+      refute @it.valid?
+    end
+  end
+
+  it "should be valid with a non-blank title" do
+    @it.title = "x"
+    assert @it.valid?
+  end
+
   describe "#publish" do
     before do
       @blog = MiniTest::Mock.new
+      @it.title = 'Foo!'
       @it.blog = @blog
     end
 
@@ -65,12 +74,26 @@ describe Post do
         @clock = stub!
         @now = DateTime.parse("2011-09-11T02:56")
         stub(@clock).now(){@now}
+        @it.title = 'Foo!'
         @it.blog = stub!
         @it.publish(@clock)
       end
 
       it "should be a datetime" do
         @it.pubdate.must_equal(@now)
+      end
+    end
+
+    describe "given an invalid post" do
+      before do @it.title = nil end
+
+      it "should not add the post to the blog" do
+        dont_allow(@blog).add_entry
+        @it.publish
+      end
+
+      it "should return false" do
+        refute(@it.publish)
       end
     end
   end
